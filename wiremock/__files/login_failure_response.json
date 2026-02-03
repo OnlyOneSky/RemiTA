@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid username or password",
+  "error_code": "AUTH_INVALID_CREDENTIALS"
+}

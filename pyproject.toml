@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "remita"
+version = "0.1.0"
+description = "Mobile test automation framework — Python + Appium + pytest with Page Object Model and WireMock"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Private" }
+authors = [
+    { name = "Remi" },
+]
+
+dependencies = [
+    "Appium-Python-Client>=4.0.0",
+    "pytest>=8.0.0",
+    "requests>=2.31.0",
+    "PyYAML>=6.0.1",
+    "allure-pytest>=2.13.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+    "pytest-xdist>=3.5.0",
+    "types-requests>=2.31.0",
+    "types-PyYAML>=6.0.12",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+# ── pytest ────────────────────────────────────────────────────────────────────
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "smoke: Critical-path tests — run on every PR",
+    "regression: Full regression suite",
+    "android: Android-only tests",
+    "ios: iOS-only tests",
+    "slow: Tests that take a long time to execute",
+]
+
+# ── ruff ──────────────────────────────────────────────────────────────────────
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+# ── mypy ──────────────────────────────────────────────────────────────────────
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

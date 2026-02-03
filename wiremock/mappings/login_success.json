@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/login",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.username",
+        "matchesJsonPath": "$.password"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "login_success_response.json"
+  }
+}

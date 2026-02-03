@@ -1,0 +1,16 @@
+# ── iOS Desired Capabilities (Appium 2.x / W3C) ──────────────────────────────
+
+capabilities:
+  platformName: "iOS"
+  "appium:automationName": "XCUITest"
+  "appium:deviceName": "iPhone 15 Pro"
+  "appium:platformVersion": "17.4"
+  "appium:app": "/path/to/your/app.app"           # ← Replace with actual .app path
+  "appium:bundleId": "com.example.app"             # ← Replace with actual bundle ID
+  "appium:noReset": false
+  "appium:fullReset": false
+  "appium:newCommandTimeout": 300
+  "appium:useNewWDA": false
+  "appium:wdaStartupRetries": 3
+  "appium:wdaStartupRetryInterval": 20000
+  "appium:showXcodeLog": false

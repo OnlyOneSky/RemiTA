@@ -1,0 +1,19 @@
+# ── General Framework Settings ────────────────────────────────────────────────
+
+appium:
+  server_url: "http://127.0.0.1:4723"
+
+wiremock:
+  base_url: "http://localhost:8080"
+
+timeouts:
+  implicit_wait: 10        # seconds — applied globally to the driver
+  explicit_wait: 15        # seconds — default for WebDriverWait
+  page_load_timeout: 30    # seconds — max wait for page/activity load
+
+screenshots:
+  on_failure: true
+  output_dir: "reports/screenshots"
+
+logging:
+  level: "INFO"            # DEBUG | INFO | WARNING | ERROR

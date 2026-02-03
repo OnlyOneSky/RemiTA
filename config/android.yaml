@@ -1,0 +1,16 @@
+# ── Android Desired Capabilities (Appium 2.x / W3C) ──────────────────────────
+
+capabilities:
+  platformName: "Android"
+  "appium:automationName": "UiAutomator2"
+  "appium:deviceName": "emulator-5554"
+  "appium:platformVersion": "14"
+  "appium:app": "/path/to/your/app.apk"          # ← Replace with actual APK path
+  "appium:appPackage": "com.example.app"          # ← Replace with actual package
+  "appium:appActivity": ".MainActivity"           # ← Replace with actual activity
+  "appium:noReset": false
+  "appium:fullReset": false
+  "appium:autoGrantPermissions": true
+  "appium:newCommandTimeout": 300
+  "appium:uiautomator2ServerInstallTimeout": 60000
+  "appium:adbExecTimeout": 30000

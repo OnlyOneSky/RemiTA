@@ -1,0 +1,55 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# ── Virtual environments ─────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── pytest ────────────────────────────────────────────────────────────────────
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# ── Allure ────────────────────────────────────────────────────────────────────
+reports/allure-results/
+reports/allure-report/
+reports/screenshots/
+
+# ── Environment ──────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── mypy ─────────────────────────────────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ── ruff ─────────────────────────────────────────────────────────────────────
+.ruff_cache/
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+# WireMock may generate runtime files; ignore them
+wiremock/extensions/

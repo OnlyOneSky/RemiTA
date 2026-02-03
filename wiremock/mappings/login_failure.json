@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/login",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.username",
+        "equalToJson": "{\"username\": \"invalid_user\", \"password\": \"wrong_pass\"}",
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "login_failure_response.json"
+  },
+  "priority": 1
+}
