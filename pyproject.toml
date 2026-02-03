@@ -45,6 +45,7 @@ addopts = [
     "-v",
     "--tb=short",
     "--strict-markers",
+    "--alluredir=allure-results",
 ]
 markers = [
     "smoke: Critical-path tests — run on every PR",

@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import logging
 import os
+import shutil
+from pathlib import Path
 from typing import Generator
 
+import allure
 import pytest
 from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
@@ -13,6 +16,9 @@ from _pytest.nodes import Item
 from src.utils.config_loader import ConfigLoader
 from src.utils.driver_factory import DriverFactory
 from src.utils.wiremock_client import WireMockClient
+
+ALLURE_RESULTS_DIR = Path("allure-results")
+ALLURE_CONFIG_DIR = Path("allure-config")
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +85,7 @@ def _reset_wiremock(wiremock: WireMockClient) -> Generator[None, None, None]:
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item: Item) -> Generator:  # type: ignore[type-arg]
-    """Take a screenshot on test failure (if configured)."""
+    """Take a screenshot on test failure and attach it to Allure report."""
     outcome = yield
     report = outcome.get_result()
 
@@ -101,5 +107,27 @@ def pytest_runtest_makereport(item: Item) -> Generator:  # type: ignore[type-arg
         try:
             driver.save_screenshot(file_path)
             logger.info("Screenshot saved → %s", file_path)
+
+            # Attach screenshot to Allure report
+            with open(file_path, "rb") as f:
+                allure.attach(
+                    f.read(),
+                    name=f"failure_{file_name}",
+                    attachment_type=allure.attachment_type.PNG,
+                )
         except Exception:
             logger.warning("Failed to take screenshot for %s", item.nodeid, exc_info=True)
+
+
+# ── Allure environment setup ─────────────────────────────────────────────────
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    """Copy Allure environment and categories config into results dir."""
+    if not ALLURE_RESULTS_DIR.exists():
+        return
+
+    for filename in ("environment.properties", "categories.json"):
+        src = ALLURE_CONFIG_DIR / filename
+        if src.exists():
+            shutil.copy(str(src), str(ALLURE_RESULTS_DIR / filename))

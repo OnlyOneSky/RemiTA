@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Product Defects",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Test Defects",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*Exception.*"
+  },
+  {
+    "name": "Skipped",
+    "matchedStatuses": ["skipped"]
+  }
+]
