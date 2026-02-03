@@ -53,3 +53,9 @@ dmypy.json
 # ── Docker ───────────────────────────────────────────────────────────────────
 # WireMock may generate runtime files; ignore them
 wiremock/extensions/
+
+# ── Sample App ───────────────────────────────────────────────────────────────
+sample-app/node_modules/
+sample-app/.expo/
+sample-app/android/
+sample-app/ios/

@@ -6,21 +6,24 @@ import logging
 import os
 import shutil
 from pathlib import Path
-from typing import Generator
+from typing import Generator, List
 
 import allure
 import pytest
 from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
+from _pytest.python import Metafunc
 
+from src.models.device_info import DeviceInfo
 from src.utils.config_loader import ConfigLoader
+from src.utils.device_manager import DeviceManager
 from src.utils.driver_factory import DriverFactory
 from src.utils.wiremock_client import WireMockClient
 
+logger = logging.getLogger(__name__)
+
 ALLURE_RESULTS_DIR = Path("allure-results")
 ALLURE_CONFIG_DIR = Path("allure-config")
-
-logger = logging.getLogger(__name__)
 
 
 # ── CLI options ───────────────────────────────────────────────────────────────
@@ -31,10 +34,68 @@ def pytest_addoption(parser: Parser) -> None:
     parser.addoption(
         "--platform",
         action="store",
-        default="android",
-        choices=["android", "ios"],
-        help="Target platform: android (default) or ios",
+        default="all",
+        choices=["android", "ios", "all"],
+        help="Target platform: android, ios, or all (default: all)",
     )
+
+
+# ── Device discovery ──────────────────────────────────────────────────────────
+
+
+def _discover_devices(platform: str) -> List[DeviceInfo]:
+    """Discover devices based on the --platform flag."""
+    if platform == "android":
+        devices = DeviceManager.discover_android()
+    elif platform == "ios":
+        devices = DeviceManager.discover_ios()
+    else:  # "all"
+        devices = DeviceManager.discover_all()
+
+    if not devices:
+        pytest.exit(
+            f"No devices found for platform='{platform}'. "
+            "Connect a device or start an emulator/simulator, then retry.",
+            returncode=1,
+        )
+
+    logger.info(
+        "Running regression on %d device(s): %s",
+        len(devices),
+        ", ".join(d.display_name for d in devices),
+    )
+    return devices
+
+
+# Cache discovered devices for the session (avoid re-running adb/xcrun per test)
+_cached_devices: List[DeviceInfo] | None = None
+
+
+def _get_devices(platform: str) -> List[DeviceInfo]:
+    global _cached_devices
+    if _cached_devices is None:
+        _cached_devices = _discover_devices(platform)
+    return _cached_devices
+
+
+# ── Dynamic parametrization ───────────────────────────────────────────────────
+
+
+def pytest_generate_tests(metafunc: Metafunc) -> None:
+    """Parametrize tests that use the ``device_info`` fixture.
+
+    Every test that requests ``device_info`` will be run once per
+    discovered device. Tests that don't request it run normally.
+    """
+    if "device_info" in metafunc.fixturenames:
+        platform = metafunc.config.getoption("--platform")
+        devices = _get_devices(platform)
+        metafunc.parametrize(
+            "device_info",
+            devices,
+            ids=[d.allure_label for d in devices],
+            scope="session",
+        )
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -42,27 +103,36 @@ def pytest_addoption(parser: Parser) -> None:
 
 @pytest.fixture(scope="session")
 def platform(request: pytest.FixtureRequest) -> str:
-    """Return the selected platform (``android`` or ``ios``)."""
+    """Return the selected platform from CLI args."""
     return request.config.getoption("--platform")  # type: ignore[return-value]
 
 
 @pytest.fixture(scope="session")
-def driver(platform: str) -> Generator:
-    """Create an Appium driver for the session, quit it afterwards."""
-    _driver = DriverFactory.get_driver(platform)
-    logger.info("Appium driver created for platform=%s (session=%s)", platform, _driver.session_id)
+def driver(device_info: DeviceInfo) -> Generator:
+    """Create an Appium driver for a specific device, quit it afterwards.
+
+    This fixture is parametrized indirectly via ``device_info``.
+    Each device gets its own driver instance.
+    """
+    _driver = DriverFactory.get_driver_for_device(device_info)
+    logger.info(
+        "Driver ready for %s (session=%s)",
+        device_info.display_name, _driver.session_id,
+    )
+
+    # Tag the Allure report with device info
+    allure.dynamic.parameter("device", device_info.display_name)
+    allure.dynamic.label("device", device_info.allure_label)
+
     yield _driver
-    logger.info("Quitting Appium driver (session=%s)", _driver.session_id)
+
+    logger.info("Quitting driver for %s", device_info.display_name)
     _driver.quit()
 
 
 @pytest.fixture(scope="session")
 def wiremock() -> Generator[WireMockClient, None, None]:
-    """Provide a ``WireMockClient`` for the session.
-
-    Stubs are reset **after each test** via the ``autouse`` fixture below so
-    tests remain isolated.
-    """
+    """Provide a ``WireMockClient`` for the session."""
     settings = ConfigLoader.load_settings()
     base_url: str = settings.get("wiremock", {}).get("base_url", "http://localhost:8080")
     client = WireMockClient(base_url)
@@ -117,9 +187,6 @@ def pytest_runtest_makereport(item: Item) -> Generator:  # type: ignore[type-arg
                 )
         except Exception:
             logger.warning("Failed to take screenshot for %s", item.nodeid, exc_info=True)
-
-
-# ── Allure environment setup ─────────────────────────────────────────────────
 
 
 def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
