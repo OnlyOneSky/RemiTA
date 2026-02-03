@@ -73,3 +73,14 @@ class ConfigLoader:
             merged.setdefault("wiremock", {})["base_url"] = env_wiremock_url
 
         return merged
+
+    @classmethod
+    def resolve_path(cls, relative_path: str) -> Path:
+        """Resolve a path relative to the project root.
+
+        If the path is already absolute, return it as-is.
+        """
+        p = Path(relative_path)
+        if p.is_absolute():
+            return p
+        return _PROJECT_ROOT / p

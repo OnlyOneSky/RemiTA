@@ -122,7 +122,8 @@ def driver(device_info: DeviceInfo) -> Generator:
     config = ConfigLoader.load_merged_config(device_info.platform)
     caps = config.get("capabilities", {})
     app_package = caps.get("appium:appPackage") or caps.get("appium:bundleId", "")
-    app_path = caps.get("appium:app")
+    app_path_raw = caps.get("appium:app")
+    app_path = str(ConfigLoader.resolve_path(app_path_raw)) if app_path_raw else None
 
     if app_package:
         installed = AppInstaller.ensure_installed(device_info, app_package, app_path)
