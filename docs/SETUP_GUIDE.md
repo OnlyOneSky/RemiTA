@@ -237,7 +237,7 @@ Download `remita-wiremock.tar` from the [GitHub Release](https://github.com/Only
 docker load -i remita-wiremock.tar
 
 # Run it
-docker run -d --name remita-wiremock -p 8080:8080 remita-wiremock:latest
+docker run -d --name remita-wiremock -p 8090:8080 remita-wiremock:latest
 ```
 
 ### Option 2: Build from source
@@ -256,7 +256,7 @@ This builds the image from `wiremock/Dockerfile` and starts it.
 docker ps | grep wiremock
 
 # Check the stubs are loaded
-curl http://localhost:8080/__admin/mappings
+curl http://localhost:8090/__admin/mappings
 ```
 
 You should see the login stubs (success + failure) in the response.

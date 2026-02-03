@@ -4,7 +4,7 @@ appium:
   server_url: "http://127.0.0.1:4723"
 
 wiremock:
-  base_url: "http://localhost:8080"
+  base_url: "http://localhost:8090"
 
 timeouts:
   implicit_wait: 10        # seconds — applied globally to the driver

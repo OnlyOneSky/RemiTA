@@ -6,6 +6,6 @@ services:
     image: remita-wiremock:latest
     container_name: remita-wiremock
     ports:
-      - "8080:8080"
+      - "8090:8080"
       - "8443:8443"
     restart: unless-stopped

@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 
 // WireMock URL — uses localhost with adb reverse for Android emulator
-// Run: adb reverse tcp:8080 tcp:8080
-const API_BASE = 'http://127.0.0.1:8080';
+// Run: adb reverse tcp:8090 tcp:8090
+const API_BASE = 'http://127.0.0.1:8090';
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
