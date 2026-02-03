@@ -1,11 +1,9 @@
 {
   "status": "success",
-  "message": "Login successful",
-  "data": {
-    "user_id": "usr_12345",
-    "username": "valid_user",
-    "display_name": "Remi Chen",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock-token",
-    "expires_in": 3600
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock-token",
+  "user": {
+    "id": 1,
+    "username": "testuser",
+    "display_name": "Remi Chen"
   }
 }

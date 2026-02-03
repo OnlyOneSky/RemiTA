@@ -9,10 +9,9 @@ import {
   Platform,
 } from 'react-native';
 
-// WireMock URL — Android emulator uses 10.0.2.2 to reach host machine
-const API_BASE = Platform.OS === 'android'
-  ? 'http://10.0.2.2:8080'
-  : 'http://127.0.0.1:8080';
+// WireMock URL — uses localhost with adb reverse for Android emulator
+// Run: adb reverse tcp:8080 tcp:8080
+const API_BASE = 'http://127.0.0.1:8080';
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');

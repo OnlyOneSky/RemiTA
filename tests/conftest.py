@@ -141,6 +141,17 @@ def wiremock() -> Generator[WireMockClient, None, None]:
 
 
 @pytest.fixture(autouse=True)
+def _reset_app_state(driver) -> Generator[None, None, None]:
+    """Reset the app to the login screen before each test."""
+    # Restart the app activity to ensure clean state
+    driver.terminate_app(driver.capabilities.get("appPackage", ""))
+    driver.activate_app(driver.capabilities.get("appPackage", ""))
+    import time
+    time.sleep(3)  # Wait for app to fully load
+    yield
+
+
+@pytest.fixture(autouse=True)
 def _reset_wiremock(wiremock: WireMockClient) -> Generator[None, None, None]:
     """Auto-use fixture that resets WireMock stubs after every test."""
     yield
