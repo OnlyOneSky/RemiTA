@@ -111,18 +111,22 @@ class AppInstaller:
     def _ensure_android(
         cls, device: DeviceInfo, package: str, apk_path: str | None
     ) -> bool:
-        if cls._is_installed_android(device.serial, package):
-            logger.info("✅ %s already installed on %s — skipping install", package, device.display_name)
-            return True
-
         if not apk_path:
+            if cls._is_installed_android(device.serial, package):
+                logger.info("✅ %s already installed on %s — no APK path, skipping", package, device.display_name)
+                return True
             logger.error(
                 "❌ %s not installed on %s and no APK path provided",
                 package, device.display_name,
             )
             return False
 
-        logger.info("📦 Installing %s on %s...", package, device.display_name)
+        # Always reinstall when APK path is provided to ensure latest version
+        if cls._is_installed_android(device.serial, package):
+            logger.info("🔄 %s found on %s — reinstalling with latest APK", package, device.display_name)
+        else:
+            logger.info("📦 %s not found on %s — installing", package, device.display_name)
+
         return cls._install_android(device.serial, apk_path)
 
     # ── iOS ───────────────────────────────────────────────────────
