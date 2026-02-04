@@ -5,8 +5,10 @@ from __future__ import annotations
 import logging
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Generator, List
+from urllib.parse import urlparse
 
 import allure
 import pytest
@@ -157,6 +159,35 @@ def wiremock() -> Generator[WireMockClient, None, None]:
     client = WireMockClient(base_url)
     logger.info("WireMockClient connected → %s (healthy=%s)", base_url, client.is_healthy())
     yield client
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _setup_adb_reverse(device_info: DeviceInfo, driver) -> Generator[None, None, None]:
+    """Set up adb reverse port forwarding after Appium driver is created.
+
+    Appium's UiAutomator2 driver may restart the ADB server during session
+    initialization, which clears any manually configured ``adb reverse``
+    mappings.  This fixture re-establishes port forwarding so the emulator
+    app can reach WireMock on the host.
+    """
+    if device_info.platform == "android":
+        settings = ConfigLoader.load_settings()
+        wiremock_url = settings.get("wiremock", {}).get("base_url", "http://localhost:8080")
+        port = urlparse(wiremock_url).port or 8080
+
+        try:
+            result = subprocess.run(
+                ["adb", "-s", device_info.serial, "reverse", f"tcp:{port}", f"tcp:{port}"],
+                capture_output=True, text=True, timeout=10,
+            )
+            if result.returncode == 0:
+                logger.info("✅ adb reverse tcp:%s → tcp:%s on %s", port, port, device_info.serial)
+            else:
+                logger.warning("⚠️ adb reverse failed: %s", result.stderr.strip())
+        except Exception:
+            logger.warning("⚠️ Could not set up adb reverse", exc_info=True)
+
+    yield
 
 
 @pytest.fixture(autouse=True)
