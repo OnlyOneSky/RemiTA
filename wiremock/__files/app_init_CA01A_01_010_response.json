@@ -1,14 +1,14 @@
 {
   "MWHEADER": {
-    "MSGID": "generic",
+    "MSGID": "CA01A-01-010",
+    "TXNSEQ": "00000000-0000-0000-0000-000000000000",
     "RETURNCODE": "0000",
     "RETURNDESC": "",
-    "TXNSEQ": "00000000-0000-0000-0000-000000000000",
     "TRACEID": "0000000000000000",
     "MESSAGE": {
       "TITLE": "",
       "CONTENT": ""
     }
   },
-  "TRANRS": null
+  "TRANRS": []
 }
