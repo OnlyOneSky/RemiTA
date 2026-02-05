@@ -5,9 +5,9 @@ capabilities:
   "appium:automationName": "UiAutomator2"
   "appium:deviceName": "emulator-5554"
   "appium:platformVersion": "14"
-  "appium:app": "sample-app/android/app/build/outputs/apk/release/app-release.apk"
-  "appium:appPackage": "com.clvn.sample"
-  "appium:appActivity": ".MainActivity"
+  "appium:app": "../company-app/app-ta-debug_1.6.4.apk"
+  "appium:appPackage": "com.cathayholdings.vdrf.ta"
+  "appium:appActivity": "com.cathayholdings.vdrf.feature.splash.SplashActivity"
   "appium:noReset": false
   "appium:fullReset": false
   "appium:autoGrantPermissions": true

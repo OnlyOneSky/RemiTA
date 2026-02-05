@@ -1,0 +1,19 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "urlPattern": ".*/CA02A-03-007.*",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.TRANRQ.otp"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "register_verify_email_otp_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
