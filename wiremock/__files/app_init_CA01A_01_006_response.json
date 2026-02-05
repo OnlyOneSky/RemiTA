@@ -1,16 +1,16 @@
 {
-  "MWHEADER" : {
-    "TXNSEQ" : "a05f995a-9a84-429a-9299-7557f7767391",
-    "MESSAGE" : {
-      "TITLE" : "",
-      "CONTENT" : ""
-    },
-    "TRACEID" : "3aee1b18aaf043a4",
-    "RETURNDESC" : "",
+  "MWHEADER": {
+    "MSGID": "CA01A-01-006",
+    "TXNSEQ": "840B951B-EEEB-499D-A9FC-BC4FA4252894",
     "RETURNCODE": "0000",
-    "MSGID" : "CA01A-01-006"
+    "RETURNDESC": "",
+    "TRACEID": "744f70f8a523aa40",
+    "MESSAGE": {
+      "TITLE": "",
+      "CONTENT": ""
+    }
   },
-  "TRANRS" : {
-    "isBinding" : true
+  "TRANRS": {
+    "isBinding": false
   }
 }
