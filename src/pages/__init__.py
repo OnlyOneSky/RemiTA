@@ -6,6 +6,7 @@ from src.pages.register_otp_page import RegisterOtpPage
 from src.pages.register_success_page import RegisterSuccessPage
 from src.pages.register_verify_email_page import RegisterVerifyEmailPage
 from src.pages.register_verify_phone_page import RegisterVerifyPhonePage
+from src.pages.welcome_page import WelcomePage
 
 __all__ = [
     "BasePage",
@@ -16,4 +17,5 @@ __all__ = [
     "RegisterSuccessPage",
     "RegisterVerifyEmailPage",
     "RegisterVerifyPhonePage",
+    "WelcomePage",
 ]

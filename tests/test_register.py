@@ -7,12 +7,12 @@ from typing import TYPE_CHECKING
 import allure
 import pytest
 
-from src.pages.login_page import LoginPage
 from src.pages.register_create_password_page import RegisterCreatePasswordPage
 from src.pages.register_otp_page import RegisterOtpPage
 from src.pages.register_success_page import RegisterSuccessPage
 from src.pages.register_verify_email_page import RegisterVerifyEmailPage
 from src.pages.register_verify_phone_page import RegisterVerifyPhonePage
+from src.pages.welcome_page import WelcomePage
 
 if TYPE_CHECKING:
     from appium.webdriver.webdriver import WebDriver
@@ -58,10 +58,14 @@ class TestRegister:
             wiremock.load_mapping_from_file(_STUB_VERIFY_EMAIL_OTP)
             wiremock.load_mapping_from_file(_STUB_CREATE_PASSWORD)
 
-        login_page = LoginPage(driver)
+        welcome_page = WelcomePage(driver)
 
-        with allure.step("Tap Register on the login screen"):
-            login_page.click(LoginPage.REGISTER_BUTTON)
+        with allure.step("Dismiss startup announcement dialogs"):
+            welcome_page.dismiss_startup_dialogs()
+
+        with allure.step("Tap 'Get Credit' on the welcome screen"):
+            assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
+            welcome_page.tap_get_credit()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
@@ -120,10 +124,14 @@ class TestRegister:
         with allure.step("Set up WireMock stub for sending phone OTP"):
             wiremock.load_mapping_from_file(_STUB_SEND_PHONE_OTP)
 
-        login_page = LoginPage(driver)
+        welcome_page = WelcomePage(driver)
 
-        with allure.step("Tap Register on the login screen"):
-            login_page.click(LoginPage.REGISTER_BUTTON)
+        with allure.step("Dismiss startup announcement dialogs"):
+            welcome_page.dismiss_startup_dialogs()
+
+        with allure.step("Tap 'Get Credit' on the welcome screen"):
+            assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
+            welcome_page.tap_get_credit()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
@@ -151,10 +159,14 @@ class TestRegister:
             wiremock.load_mapping_from_file(_STUB_SEND_PHONE_OTP)
             wiremock.load_mapping_from_file(_STUB_VERIFY_PHONE_OTP)
 
-        login_page = LoginPage(driver)
+        welcome_page = WelcomePage(driver)
 
-        with allure.step("Tap Register on the login screen"):
-            login_page.click(LoginPage.REGISTER_BUTTON)
+        with allure.step("Dismiss startup announcement dialogs"):
+            welcome_page.dismiss_startup_dialogs()
+
+        with allure.step("Tap 'Get Credit' on the welcome screen"):
+            assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
+            welcome_page.tap_get_credit()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 

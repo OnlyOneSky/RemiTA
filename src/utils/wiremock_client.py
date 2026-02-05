@@ -58,6 +58,22 @@ class WireMockClient:
             mapping: dict[str, Any] = json.load(fh)
         return self.create_stub(mapping)
 
+    def load_mappings_from_dir(self, dir_path: str | Path, pattern: str = "*.json") -> int:
+        """Load all mapping files matching *pattern* from a directory.
+
+        Returns the number of mappings loaded.
+        """
+        directory = Path(dir_path)
+        count = 0
+        for file in sorted(directory.glob(pattern)):
+            try:
+                self.load_mapping_from_file(file)
+                count += 1
+            except Exception:
+                logger.warning("Failed to load mapping: %s", file, exc_info=True)
+        logger.info("Loaded %d mapping(s) from %s", count, directory)
+        return count
+
     def delete_all_stubs(self) -> None:
         """Remove every stub mapping."""
         resp = requests.delete(f"{self._admin}/mappings", timeout=10)

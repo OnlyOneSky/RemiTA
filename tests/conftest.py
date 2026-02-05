@@ -192,21 +192,47 @@ def _setup_adb_reverse(device_info: DeviceInfo, driver) -> Generator[None, None,
 
 @pytest.fixture(autouse=True)
 def _reset_app_state(driver) -> Generator[None, None, None]:
-    """Reset the app to the login screen before each test."""
-    # Restart the app activity to ensure clean state
+    """Reset the app to a clean state before each test.
+
+    Restarts the app and waits for splash + init API calls to complete.
+    Dialog dismissal is handled by each test's page objects since
+    different flows may need different handling.
+    """
     driver.terminate_app(driver.capabilities.get("appPackage", ""))
     driver.activate_app(driver.capabilities.get("appPackage", ""))
     import time
-    time.sleep(3)  # Wait for app to fully load
+    time.sleep(5)  # Wait for splash + init API calls to complete
     yield
+
+
+# Path to the WireMock mappings directory (relative to project root).
+_WIREMOCK_MAPPINGS_DIR = Path("wiremock/mappings")
+
+
+def _load_init_stubs(client: WireMockClient) -> None:
+    """Reload the app init stubs and catch-all that WireMock needs.
+
+    These stubs are required for the app to survive its splash-screen
+    startup API calls (public key, customer service, etc.).
+    """
+    for f in sorted(_WIREMOCK_MAPPINGS_DIR.glob("app_*.json")):
+        try:
+            client.load_mapping_from_file(f)
+        except Exception:
+            logger.warning("Failed to load init stub: %s", f, exc_info=True)
 
 
 @pytest.fixture(autouse=True)
 def _reset_wiremock(wiremock: WireMockClient) -> Generator[None, None, None]:
-    """Auto-use fixture that resets WireMock stubs after every test."""
+    """Auto-use fixture that resets WireMock stubs after every test.
+
+    After reset, reloads the app init stubs so the next test's app
+    restart doesn't crash on splash-screen API calls.
+    """
     yield
     try:
         wiremock.reset()
+        _load_init_stubs(wiremock)
     except Exception:
         logger.warning("Failed to reset WireMock after test", exc_info=True)
 
