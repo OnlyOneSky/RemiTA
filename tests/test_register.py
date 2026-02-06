@@ -58,8 +58,6 @@ class TestRegister:
             elapsed = _time.time() - _start
             print(f">>> [{elapsed:.1f}s] {msg}")
         
-        # Force implicit wait to 0 to speed up element lookups
-        driver.implicitly_wait(0)
         _log("Test starting, loading WireMock stubs...")
         with allure.step("Set up WireMock stubs for the full registration flow"):
             wiremock.load_mapping_from_file(_STUB_SEND_PHONE_OTP)

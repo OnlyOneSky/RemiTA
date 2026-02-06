@@ -198,10 +198,13 @@ def _reset_app_state(driver) -> Generator[None, None, None]:
     Dialog dismissal is handled by each test's page objects since
     different flows may need different handling.
     """
+    # Force implicit wait to 0 for faster element lookups
+    driver.implicitly_wait(0)
+    
     driver.terminate_app(driver.capabilities.get("appPackage", ""))
     driver.activate_app(driver.capabilities.get("appPackage", ""))
     import time
-    time.sleep(5)  # Wait for splash + init API calls to complete
+    time.sleep(3)  # Wait for splash + init API calls to complete
     yield
 
 
