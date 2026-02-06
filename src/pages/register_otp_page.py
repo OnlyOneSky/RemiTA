@@ -23,7 +23,7 @@ class RegisterOtpPage(BasePage):
     OTP_DESC: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/tv_otp_desc")
     PHONE_NUMBER_DISPLAY: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/tv_phone_number")
     PIN_INPUT: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/pcc_pin")
-    CTA_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/cta")
+    CTA_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/btn_primary")  # Verify button
     HELP_LINK: tuple[str, str] = (AppiumBy.ID, f"{_PKG}/btn_help")
 
     def __init__(self, driver: WebDriver) -> None:
