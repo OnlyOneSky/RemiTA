@@ -61,11 +61,16 @@ class TestRegister:
         welcome_page = WelcomePage(driver)
 
         with allure.step("Dismiss startup announcement dialogs"):
-            welcome_page.dismiss_startup_dialogs()
+            print("\n>>> [1] Checking for dialogs...")
+            dismissed = welcome_page.dismiss_startup_dialogs()
+            print(f">>> [1] Dismissed {dismissed} dialogs")
 
         with allure.step("Navigate through welcome → intro → T&C to registration"):
+            print(">>> [2] Checking if welcome page is displayed...")
             assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
+            print(">>> [3] Welcome page displayed, calling navigate_to_registration...")
             welcome_page.navigate_to_registration()
+            print(">>> [4] Navigation complete")
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
