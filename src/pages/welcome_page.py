@@ -51,13 +51,13 @@ class WelcomePage(BasePage):
 
     INTRO_CLOSE_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/ib_close")
     INTRO_TITLE: tuple[str, str] = (AppiumBy.ID, f"{_RID}/title")
-    BECOME_MEMBER_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/cta")
+    BECOME_MEMBER_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/btn_primary")
 
     # ── Locators: Terms & Conditions popup ────────────────────────────────
 
     TERMS_DIALOG_TITLE: tuple[str, str] = (AppiumBy.ID, f"{_RID}/tv_dialog_title")
     TERMS_LIST: tuple[str, str] = (AppiumBy.ID, f"{_RID}/rv_terms")
-    AGREE_TERMS_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/cta")
+    AGREE_TERMS_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/btn_primary")
 
     def __init__(self, driver: WebDriver) -> None:
         super().__init__(driver)
@@ -138,15 +138,20 @@ class WelcomePage(BasePage):
         """Complete the full navigation from welcome screen to registration.
 
         Handles: Get Credit → Intro popup → T&C popup → Verify Phone screen.
+        
+        Both the intro popup and T&C popup use btn_primary as the action button,
+        so we tap it twice after the initial Get Credit tap.
         """
         import time
 
+        # Step 1: Tap "Get Credit" on welcome screen
         self.tap_get_credit(timeout=timeout)
-        time.sleep(1)
+        time.sleep(2)  # Wait for intro popup to appear
 
-        if self.is_intro_popup_displayed(timeout=5):
-            self.tap_become_member(timeout=timeout)
-            time.sleep(1)
+        # Step 2: Tap "Become a Member" on intro popup
+        self.tap_become_member(timeout=timeout)
+        time.sleep(2)  # Wait for T&C popup to appear
 
-        if self.is_terms_popup_displayed(timeout=5):
-            self.tap_agree_terms(timeout=timeout)
+        # Step 3: Tap "I Agree" on T&C popup
+        self.tap_agree_terms(timeout=timeout)
+        time.sleep(1)  # Wait for verify phone screen to load
