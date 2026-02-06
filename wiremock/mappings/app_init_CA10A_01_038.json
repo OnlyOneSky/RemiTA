@@ -1,0 +1,14 @@
+{
+  "priority": 5,
+  "request": {
+    "method": "POST",
+    "urlPattern": ".*/CA10A-01-038.*"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "app_init_CA10A_01_038_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

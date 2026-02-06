@@ -1,0 +1,18 @@
+{
+  "MWHEADER": {
+    "TXNSEQ": "bde85955-61ef-439a-9149-c7f64ccdcf72",
+    "MESSAGE": {
+      "TITLE": "",
+      "CONTENT": ""
+    },
+    "TRACEID": "e05c6979ac7433ad",
+    "RETURNDESC": "",
+    "RETURNCODE": "0000",
+    "MSGID": "CA10A-01-038"
+  },
+  "TRANRS": {
+    "referralCode": "TESTREF123",
+    "createTimestamp": 1700000000000,
+    "isExpired": false
+  }
+}
