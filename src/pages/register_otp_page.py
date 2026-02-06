@@ -34,21 +34,34 @@ class RegisterOtpPage(BasePage):
     def enter_otp(self, otp: str) -> None:
         """Enter a 6-digit OTP into the PinCodeComponent.
 
-        The ``pcc_pin`` component contains individual ``EditText`` children
-        for each digit.  We locate them all and send one character at a time.
-        If no children are found, fall back to typing directly into the
-        component.
+        Tries multiple approaches:
+        1. Find individual EditText children and enter one digit each
+        2. Click the component and type the full OTP
+        3. Use Android keycode events
         """
+        import time
+        from appium.webdriver.extensions.android.nativekey import AndroidKey
+        
         component = self.find_element(self.PIN_INPUT)
+        
+        # Try to find individual digit fields
         digit_fields = component.find_elements(AppiumBy.CLASS_NAME, "android.widget.EditText")
-
-        if digit_fields:
+        
+        if digit_fields and len(digit_fields) >= len(otp):
+            # Method 1: Individual fields
             for i, digit in enumerate(otp):
+                digit_fields[i].click()
                 digit_fields[i].send_keys(digit)
         else:
-            # Fallback: type the full OTP directly into the component.
+            # Method 2: Click and type directly using keyboard
             component.click()
-            component.send_keys(otp)
+            time.sleep(0.5)
+            
+            # Type each digit with keypress
+            for digit in otp:
+                key_code = getattr(AndroidKey, f"DIGIT_{digit}")
+                self.driver.press_keycode(key_code)
+                time.sleep(0.1)
 
     def tap_verify(self) -> None:
         """Tap the primary CTA (Verify) button."""
