@@ -1,0 +1,35 @@
+{
+  "MWHEADER": {
+    "MSGID": "CA02A-01-002",
+    "RETURNCODE": "0000",
+    "MESSAGE": {
+      "TITLE": "",
+      "CONTENT": ""
+    },
+    "TXNSEQ": "32c6bf91-2b96-4807-9f3b-6b4c63e8bcd7",
+    "RETURNDESC": "",
+    "TRACEID": "5fe3565bd345da70"
+  },
+  "TRANRS": [
+    {
+      "oid": 35,
+      "type": "TC01",
+      "typeName": "T&C of Credit"
+    },
+    {
+      "oid": 32,
+      "type": "TC03",
+      "typeName": "PDPD Notification"
+    },
+    {
+      "oid": 33,
+      "type": "TC04",
+      "typeName": "E-Banking Service T&C"
+    },
+    {
+      "oid": 20,
+      "type": "TC02",
+      "typeName": "Privacy Policy"
+    }
+  ]
+}
