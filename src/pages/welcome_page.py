@@ -72,7 +72,7 @@ class WelcomePage(BasePage):
         """Tap 'Got It' to dismiss the current announcement dialog."""
         self.click(self.DIALOG_GOT_IT, timeout=timeout)
 
-    def dismiss_startup_dialogs(self, max_dialogs: int = 5, timeout: int = 10) -> int:
+    def dismiss_startup_dialogs(self, max_dialogs: int = 5, timeout: int = 3) -> int:
         """Dismiss all startup announcement dialogs.
 
         Returns the number of dialogs dismissed. Keeps tapping 'Got It'
@@ -82,7 +82,7 @@ class WelcomePage(BasePage):
 
         dismissed = 0
         for _ in range(max_dialogs):
-            if self.is_dialog_displayed(timeout=timeout if dismissed == 0 else 3):
+            if self.is_dialog_displayed(timeout=timeout):
                 self.dismiss_dialog()
                 dismissed += 1
                 time.sleep(0.5)  # Brief pause for next dialog to appear
