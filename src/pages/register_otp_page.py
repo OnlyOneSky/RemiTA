@@ -49,11 +49,14 @@ class RegisterOtpPage(BasePage):
         
         if digit_fields and len(digit_fields) >= len(otp):
             # Method 1: Individual fields
+            print(f"    >>> OTP: Using individual fields method ({len(digit_fields)} fields)")
             for i, digit in enumerate(otp):
                 digit_fields[i].click()
                 digit_fields[i].send_keys(digit)
+                time.sleep(0.1)  # Small delay between digits
         else:
             # Method 2: Click and type directly using keyboard
+            print(f"    >>> OTP: Using keycode method (found {len(digit_fields) if digit_fields else 0} fields)")
             component.click()
             time.sleep(0.5)
             
@@ -61,11 +64,19 @@ class RegisterOtpPage(BasePage):
             for digit in otp:
                 key_code = getattr(AndroidKey, f"DIGIT_{digit}")
                 self.driver.press_keycode(key_code)
-                time.sleep(0.1)
+                time.sleep(0.15)  # Slightly longer delay
+        
+        # Wait for any auto-submit or UI update after OTP entry
+        print("    >>> OTP: Entry complete, waiting 2s for app response...")
+        time.sleep(2)
 
     def tap_verify(self) -> None:
         """Tap the primary CTA (Verify) button."""
+        print("    >>> OTP: Tapping Verify button...")
         self.click(self.CTA_BUTTON)
+        print("    >>> OTP: Verify tapped, waiting 2s for API response...")
+        import time
+        time.sleep(2)
 
     def tap_resend(self) -> None:
         """Tap the resend / secondary CTA button (same element, text toggles)."""
