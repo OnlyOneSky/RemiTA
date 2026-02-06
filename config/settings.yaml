@@ -7,8 +7,8 @@ wiremock:
   base_url: "http://localhost:8090"
 
 timeouts:
-  implicit_wait: 10        # seconds — applied globally to the driver
-  explicit_wait: 15        # seconds — default for WebDriverWait
+  implicit_wait: 0         # seconds — keep at 0 for explicit waits only
+  explicit_wait: 5         # seconds — default for WebDriverWait (reduced for speed)
   page_load_timeout: 30    # seconds — max wait for page/activity load
 
 screenshots:
