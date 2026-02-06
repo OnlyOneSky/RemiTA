@@ -227,12 +227,21 @@ def _load_init_stubs(client: WireMockClient) -> None:
 
 @pytest.fixture(autouse=True)
 def _reset_wiremock(wiremock: WireMockClient) -> Generator[None, None, None]:
-    """Auto-use fixture that resets WireMock stubs after every test.
+    """Auto-use fixture that resets WireMock stubs before and after every test.
 
-    After reset, reloads the app init stubs so the next test's app
-    restart doesn't crash on splash-screen API calls.
+    Before: Reset and load init stubs so app startup API calls work.
+    After: Reset and reload for the next test.
     """
+    # BEFORE test: ensure init stubs are loaded
+    try:
+        wiremock.reset()
+        _load_init_stubs(wiremock)
+    except Exception:
+        logger.warning("Failed to setup WireMock before test", exc_info=True)
+    
     yield
+    
+    # AFTER test: reset for clean state (next test will reload)
     try:
         wiremock.reset()
         _load_init_stubs(wiremock)

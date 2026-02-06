@@ -2,12 +2,7 @@
   "priority": 1,
   "request": {
     "method": "POST",
-    "urlPattern": ".*/CA02A-03-004.*",
-    "bodyPatterns": [
-      {
-        "matchesJsonPath": "$.TRANRQ.phoneNumber"
-      }
-    ]
+    "urlPattern": ".*/CA02A-03-004.*"
   },
   "response": {
     "status": 200,

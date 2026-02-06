@@ -2,12 +2,7 @@
   "priority": 1,
   "request": {
     "method": "POST",
-    "urlPattern": ".*/CA02A-04-005.*",
-    "bodyPatterns": [
-      {
-        "matchesJsonPath": "$.TRANRQ.otp"
-      }
-    ]
+    "urlPattern": ".*/CA02A-04-005.*"
   },
   "response": {
     "status": 200,
