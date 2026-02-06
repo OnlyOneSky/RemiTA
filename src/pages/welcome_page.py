@@ -47,6 +47,18 @@ class WelcomePage(BasePage):
     LOGIN_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/btn_secondary")
     BANNER_VIEW: tuple[str, str] = (AppiumBy.ID, f"{_RID}/bannerView")
 
+    # ── Locators: Intro popup (after Get Credit) ──────────────────────────
+
+    INTRO_CLOSE_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/ib_close")
+    INTRO_TITLE: tuple[str, str] = (AppiumBy.ID, f"{_RID}/title")
+    BECOME_MEMBER_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/cta")
+
+    # ── Locators: Terms & Conditions popup ────────────────────────────────
+
+    TERMS_DIALOG_TITLE: tuple[str, str] = (AppiumBy.ID, f"{_RID}/tv_dialog_title")
+    TERMS_LIST: tuple[str, str] = (AppiumBy.ID, f"{_RID}/rv_terms")
+    AGREE_TERMS_BUTTON: tuple[str, str] = (AppiumBy.ID, f"{_RID}/cta")
+
     def __init__(self, driver: WebDriver) -> None:
         super().__init__(driver)
 
@@ -99,3 +111,42 @@ class WelcomePage(BasePage):
     def tap_language_toggle(self, timeout: int = 5) -> None:
         """Tap the language toggle to switch display language."""
         self.click(self.LANGUAGE_TOGGLE, timeout=timeout)
+
+    # ── Intro popup actions ───────────────────────────────────────────────
+
+    def is_intro_popup_displayed(self, timeout: int = 10) -> bool:
+        """Return True if the intro popup (Become a Member) is visible."""
+        return self.is_displayed(self.INTRO_TITLE, timeout=timeout)
+
+    def tap_become_member(self, timeout: int = 10) -> None:
+        """Tap 'Become a Member' on the intro popup."""
+        self.click(self.BECOME_MEMBER_BUTTON, timeout=timeout)
+
+    # ── Terms & Conditions popup actions ──────────────────────────────────
+
+    def is_terms_popup_displayed(self, timeout: int = 10) -> bool:
+        """Return True if the Terms & Conditions popup is visible."""
+        return self.is_displayed(self.TERMS_DIALOG_TITLE, timeout=timeout)
+
+    def tap_agree_terms(self, timeout: int = 10) -> None:
+        """Tap 'Agree' on the Terms & Conditions popup."""
+        self.click(self.AGREE_TERMS_BUTTON, timeout=timeout)
+
+    # ── Full registration navigation ──────────────────────────────────────
+
+    def navigate_to_registration(self, timeout: int = 10) -> None:
+        """Complete the full navigation from welcome screen to registration.
+
+        Handles: Get Credit → Intro popup → T&C popup → Verify Phone screen.
+        """
+        import time
+
+        self.tap_get_credit(timeout=timeout)
+        time.sleep(1)
+
+        if self.is_intro_popup_displayed(timeout=5):
+            self.tap_become_member(timeout=timeout)
+            time.sleep(1)
+
+        if self.is_terms_popup_displayed(timeout=5):
+            self.tap_agree_terms(timeout=timeout)

@@ -63,9 +63,9 @@ class TestRegister:
         with allure.step("Dismiss startup announcement dialogs"):
             welcome_page.dismiss_startup_dialogs()
 
-        with allure.step("Tap 'Get Credit' on the welcome screen"):
+        with allure.step("Navigate through welcome → intro → T&C to registration"):
             assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
-            welcome_page.tap_get_credit()
+            welcome_page.navigate_to_registration()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
@@ -129,9 +129,9 @@ class TestRegister:
         with allure.step("Dismiss startup announcement dialogs"):
             welcome_page.dismiss_startup_dialogs()
 
-        with allure.step("Tap 'Get Credit' on the welcome screen"):
+        with allure.step("Navigate through welcome → intro → T&C to registration"):
             assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
-            welcome_page.tap_get_credit()
+            welcome_page.navigate_to_registration()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
@@ -164,9 +164,9 @@ class TestRegister:
         with allure.step("Dismiss startup announcement dialogs"):
             welcome_page.dismiss_startup_dialogs()
 
-        with allure.step("Tap 'Get Credit' on the welcome screen"):
+        with allure.step("Navigate through welcome → intro → T&C to registration"):
             assert welcome_page.is_page_displayed(), "Welcome screen did not appear"
-            welcome_page.tap_get_credit()
+            welcome_page.navigate_to_registration()
 
         verify_phone_page = RegisterVerifyPhonePage(driver)
 
