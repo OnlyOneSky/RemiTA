@@ -58,8 +58,6 @@ class TestRegister:
             elapsed = _time.time() - _start
             print(f">>> [{elapsed:.1f}s] {msg}")
         
-        # Debug: show driver's implicit wait setting
-        print(f">>> Driver implicit wait: {driver.timeouts.implicit_wait}ms")
         _log("Test starting, loading WireMock stubs...")
         with allure.step("Set up WireMock stubs for the full registration flow"):
             wiremock.load_mapping_from_file(_STUB_SEND_PHONE_OTP)
