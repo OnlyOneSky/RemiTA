@@ -1,0 +1,22 @@
+{
+  "MWHEADER": {
+    "TRACEID": "bdd69fb56196f4ac1d752e3288a2fc65",
+    "RETURNDESC": "",
+    "RETURNCODE": "0000",
+    "MSGID": "CA14A-01-002",
+    "TXNSEQ": "string",
+    "SOURCECHANNEL": "string"
+  },
+  "TRANRS": [
+    {"oid": 1, "functionName": "FL10", "status": 1},
+    {"oid": 2, "functionName": "FL08", "status": 1},
+    {"oid": 3, "functionName": "FL04", "status": 1},
+    {"oid": 4, "functionName": "FL07", "status": 1},
+    {"oid": 5, "functionName": "FL05", "status": 1},
+    {"oid": 6, "functionName": "FL03", "status": 1},
+    {"oid": 7, "functionName": "FL02", "status": 1},
+    {"oid": 8, "functionName": "FL01", "status": 1},
+    {"oid": 9, "functionName": "FL06", "status": 1},
+    {"oid": 10, "functionName": "FL09", "status": 1}
+  ]
+}
